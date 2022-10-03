@@ -5,7 +5,10 @@ import crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -29,7 +32,10 @@ public class UserController {
     }
 
     @PostMapping("/new")
-    public String saveNewUser(@ModelAttribute("user") User user) {
+    public String saveNewUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "new-user";
+        }
         userService.saveUser(user);
         return "redirect:/";
     }
@@ -40,9 +46,13 @@ public class UserController {
         return "edit-user";
     }
 
-    @PatchMapping("/updateUser")
-    public String updateUser(@ModelAttribute("user") User user) {
-        userService.updateUser(user);
+    @PatchMapping("/updateUser/{id}")
+    public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                             @PathVariable("id") long id) {
+        if (bindingResult.hasErrors()) {
+            return "edit-user";
+        }
+        userService.updateUser(user, id);
         return "redirect:/";
     }
 

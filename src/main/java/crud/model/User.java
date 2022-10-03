@@ -1,6 +1,9 @@
 package crud.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -10,12 +13,17 @@ public class User {
     private Long id;
 
     @Column(name = "name")
+    @NotBlank(message = "Name should not be empty")
+    @Size(min = 2, max = 256, message = "Name should be between 2 and 256 characters")
     private String firstName;
 
     @Column(name = "last_name")
+    @NotBlank(message = "Last name should not be empty")
+    @Size(min = 2, max = 256, message = "Last name should be between 2 and 256 characters")
     private String lastName;
 
     @Column(name = "email")
+    @Email(message = "Email should be valid")
     private String email;
 
     public User() {

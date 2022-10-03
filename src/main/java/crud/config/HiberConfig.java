@@ -23,8 +23,12 @@ import java.util.Properties;
 @EnableTransactionManagement
 @ComponentScan(value = "crud")
 public class HiberConfig {
+    private final Environment env;
+
     @Autowired
-    private Environment env;
+    public HiberConfig(Environment env) {
+        this.env = env;
+    }
 
     @Bean
     public DataSource getDataSource() {
@@ -62,10 +66,12 @@ public class HiberConfig {
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
         return new PersistenceExceptionTranslationPostProcessor();
     }
+
     public Properties additionalProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         properties.setProperty("hibernate.show_sql", env.getProperty("hibernate.show_sql"));
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
         return properties;
     }
 }
