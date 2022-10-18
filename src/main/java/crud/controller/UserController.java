@@ -52,7 +52,8 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "edit-user";
         }
-        userService.updateUser(user, id);
+        user.setId(id);
+        userService.updateUser(user);
         return "redirect:/";
     }
 
